@@ -1,0 +1,37 @@
+doctype html
+html
+  head
+    title Propusnice
+  body
+    h1 Propusnice
+    p Ukupno propusnica: #{total}
+    p Aktivnih propusnica: #{active}
+
+    if username
+      p Prijavljeni ste kao #{username}
+      form(method="post" action="/logout")
+        button(type="submit") Odjava
+
+      h2 Popis propusnica
+      table
+        tr
+          th Ime i prezime
+          th Dokument
+          th Vrijeme izdavanja
+          th Status
+          th Akcije
+        each pass in passes
+          tr
+            td
+              a(href=`/info/${pass.id}`)= pass.name
+            td= pass.document
+            td= pass.issuedAt
+            td= pass.status
+            td
+              if pass.status === "ACTIVE"
+                form(method="post" action=`/manage/${pass.id}/cancel` style="display:inline")
+                  button(type="submit") Poništi
+              form(method="post" action=`/manage/${pass.id}/delete` style="display:inline")
+                button(type="submit") Obriši
+    else
+      a(href="/login") Prijava
